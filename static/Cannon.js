@@ -14,16 +14,23 @@ class Cannon extends THREE.Object3D {
     get getCannon(){
         return this;
     }
+    
+    get getBarrel(){
+        return this.barrel;
+    }
+
+    set barrelRotation(angle){
+        this.barrel.rotation.x = angle* Math.PI / 180;
+    }
 
     barrel() {
         console.log('barrel');
         const geometry = new THREE.CylinderGeometry(12, 12, 80, 48);
+        geometry.translate(0, 30, 0);
         const material = new THREE.MeshBasicMaterial({color: 0xff00ff});
-        const cylinder = new THREE.Mesh(geometry, material);
-        cylinder.position.set(0, 40, 0);
-        // cylinder.position.set(1000, 20, 2000);
-
-        this.add(cylinder);
+        this.barrel = new THREE.Mesh(geometry, material);
+        this.barrel.position.set(0, 10, 0);
+        this.add(this.barrel);
 
     }
 
@@ -31,7 +38,7 @@ class Cannon extends THREE.Object3D {
         const geometry = new THREE.CylinderGeometry( 15, 15, 10, 32 );
         const material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
         let wheel = new THREE.Mesh( geometry, material );
-        wheel.position.set(-17 ,15, 10);
+        wheel.position.set(-17 ,15, 0);
         wheel.rotateX(Math.PI/2);
         wheel.rotateZ(Math.PI/2);
         this.add(wheel);
@@ -39,11 +46,9 @@ class Cannon extends THREE.Object3D {
         wheel = new THREE.Mesh( geometry, material );
         wheel.rotateX(Math.PI/2);
         wheel.rotateZ(Math.PI/2);
-        wheel.position.set(17 ,15, 10);
+        wheel.position.set(17 ,15, 0);
 
         this.add(wheel);
         
-
-
     }
 }

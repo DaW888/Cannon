@@ -1,6 +1,4 @@
-var main3d;
-var ui;
 $(document).ready(function() {
-    net = new Main3D();
-    ui = new Ui();
+    const main3d = new Main3D();
+    const ui = new Ui();
 });
