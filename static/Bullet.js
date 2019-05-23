@@ -11,8 +11,8 @@ class Bullet extends THREE.Mesh {
     }
 
     setPosition(){
-        const barrRot = $('#barrelRotation').val()*Math.PI/180 - Math.PI/2; 
-        const canRot = $('#cannonRotation').val()*Math.PI/180 - Math.PI/2; 
+        const barrRot = $('#barrelRotation').val()*Math.PI/180 - Math.PI/2;
+        const canRot = $('#cannonRotation').val()*Math.PI/180 - Math.PI/2;
 
 
         const x = 70 * Math.cos(barrRot) * Math.cos(canRot);

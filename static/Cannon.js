@@ -9,12 +9,13 @@ class Cannon extends THREE.Object3D {
         // this.add(cube);
         this.barrel();
         this.wheels();
+        this.add(new THREE.AxesHelper(1000));
     }
 
     get getCannon(){
         return this;
     }
-    
+
     get getBarrel(){
         return this.barrel;
     }
@@ -49,6 +50,6 @@ class Cannon extends THREE.Object3D {
         wheel.position.set(17 ,15, 0);
 
         this.add(wheel);
-        
+
     }
 }

@@ -12,7 +12,7 @@ class Main3D{
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         $('#root').append(renderer.domElement);
-        
+
         const axes = new THREE.AxesHelper(1000);
         this.scene.add(axes);
 
@@ -75,10 +75,10 @@ class Main3D{
 
             if(shot){
                 t += 0.1;
-                const angle = $('#barrelRotation').val() * Math.PI / 180;
-                const x = t * velocity * Math.cos(angle) * dir.z + dir.x;
+                const angle = (90 - $('#barrelRotation').val()) * Math.PI / 180;
+                const x = t * velocity * Math.cos(angle) * dir.x;
                 const y = t * velocity * Math.sin(angle) - ((gravity * t * t) / 2) + 80;
-                const z = t * velocity * Math.cos(angle) - 1750;
+                const z = t * velocity * Math.cos(angle) * dir.z - 1750;
 
                 this.bul.position.set(x,y,z);
 
@@ -86,7 +86,7 @@ class Main3D{
                     shot = false;
                 }
             }
-            
+
             // rendering
             requestAnimationFrame(render);
             console.log('render leci');
@@ -109,12 +109,13 @@ class Main3D{
 
 
         $('#cannonRotation').on('input', ()=>{
-            this.can.rotation.y = $('#cannonRotation').val()*Math.PI/180; 
+            this.can.rotation.y = $('#cannonRotation').val()*Math.PI/180;
             this.bul.setPosition();
+
         })
 
         $('#barrelRotation').on('input', ()=>{
-            this.can.barrelRotation = $('#barrelRotation').val(); 
+            this.can.barrelRotation = $('#barrelRotation').val();
             this.bul.setPosition();
         })
     }
