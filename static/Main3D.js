@@ -76,11 +76,12 @@ class Main3D{
             if(shot){
                 t += 0.1;
                 const angle = (90 - $('#barrelRotation').val()) * Math.PI / 180;
-                const x = t * velocity * Math.cos(angle) * dir.x;
+                const x = t * velocity * Math.cos(angle) * dir.x + setting.xOfFirstCannon;
                 const y = t * velocity * Math.sin(angle) - ((gravity * t * t) / 2) + 80;
                 const z = t * velocity * Math.cos(angle) * dir.z - 1750;
 
                 this.bul.position.set(x,y,z);
+                net.SETshotBullet(this.bul.position); //! do zrobienia
 
                 if(this.bul.position.y <= 0){
                     shot = false;
@@ -99,24 +100,26 @@ class Main3D{
     cannonSet(){
         const cannon = new Cannon();
         this.can = cannon.getCannon;
-        this.can.position.set(0, 0, -1750);
+        this.can.position.set(setting.xOfFirstCannon, 0, -1750);
         this.scene.add(this.can);
 
         const bullet = new Bullet();
         this.bul = bullet.getBullet;
-        this.bul.position.set(0, 80, -1750);
+        this.bul.position.set(setting.xOfFirstCannon, 80, -1750);
         this.scene.add(this.bul);
 
 
         $('#cannonRotation').on('input', ()=>{
             this.can.rotation.y = $('#cannonRotation').val()*Math.PI/180;
-            this.bul.setPosition();
+            let bulletPos = this.bul.setPosition();
+            net.SETcannonPos(this.can.rotation.y, bulletPos);
 
         })
 
         $('#barrelRotation').on('input', ()=>{
             this.can.barrelRotation = $('#barrelRotation').val();
-            this.bul.setPosition();
+            let bulletPos = this.bul.setPosition();
+            net.SETbarrelPos($('#barrelRotation').val(), bulletPos);
         })
     }
 

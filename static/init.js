@@ -1,5 +1,8 @@
+let net;
+let main3d;
+let ui;
 $(document).ready(function() {
-    const main3d = new Main3D();
-    const ui = new Ui();
-    const net = new Net();
+    net = new Net();
+    main3d = new Main3D();
+    ui = new Ui();
 });
