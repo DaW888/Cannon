@@ -32,13 +32,12 @@ io.on('connection', function(client){
 
     client.emit("onconnect", {
         clientName: client.id,
-        userArrayLen: userArray.length
+        userNr: userArray.length
     })
 
     if(userArray.length == 2){
-        userArray[0].emit('onconnect', {
-            clientName: client.id,
-            userArrayLen: userArray.length
+        io.emit('connectSecond', {
+            second: true
         })
     }
 
@@ -52,15 +51,15 @@ io.on('connection', function(client){
 
     client.on('cannonPos', (data) => {
         // console.log(data);
-        io.sockets.emit('cannonPos', data);
+        client.broadcast.emit('cannonPos', data);
     })
 
     client.on('barrelPos', (data) => {
-        io.sockets.emit('barrelPos', data);
+        client.broadcast.emit('barrelPos', data);
     })
 
     client.on('shotBullet', (data) => {
-        io.sockets.emit('shotBullet', data);
+        client.broadcast.emit('shotBullet', data);
     })
 })
 

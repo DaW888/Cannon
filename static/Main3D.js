@@ -40,7 +40,7 @@ class Main3D{
         // this.camera.position.set(0, 80, 200);
         this.camera.lookAt(this.scene.position);
 
-        this.cannonSet();
+        // this.cannonSet(); //! cannon set old
         console.log(this.scene);
 
         let velocity = $('#velocity').val();
@@ -62,7 +62,7 @@ class Main3D{
         $('#shot').click(()=>{
             shot = true;
             this.can.getBarrel.getWorldDirection(dir);
-            const start = this.bul.getBullet.position;
+            // const start = this.bul.getBullet.position;
             console.log(dir);
             t = 0;
         })
@@ -76,12 +76,17 @@ class Main3D{
             if(shot){
                 t += 0.1;
                 const angle = (90 - $('#barrelRotation').val()) * Math.PI / 180;
-                const x = t * velocity * Math.cos(angle) * dir.x + setting.xOfFirstCannon;
+                let userNr = net.getUserNr;
+                let xPosBullet = setting.xOfFirstCannon;
+                if(userNr == 2)
+                    xPosBullet = setting.xOfSecondCannon;
+                const x = t * velocity * Math.cos(angle) * dir.x + xPosBullet;
                 const y = t * velocity * Math.sin(angle) - ((gravity * t * t) / 2) + 80;
                 const z = t * velocity * Math.cos(angle) * dir.z - 1750;
 
                 this.bul.position.set(x,y,z);
-                net.SETshotBullet(this.bul.position); //! do zrobienia
+                let bulletPos = this.bul.getBulletPos;
+                net.SETshotBullet(bulletPos);
 
                 if(this.bul.position.y <= 0){
                     shot = false;
@@ -97,16 +102,39 @@ class Main3D{
 
     }
 
-    cannonSet(){
-        const cannon = new Cannon();
-        this.can = cannon.getCannon;
-        this.can.position.set(setting.xOfFirstCannon, 0, -1750);
+    cannonSet(userNr){
+        console.log(userNr);
+
+        // Cannon Create
+        if(userNr == 1){
+            const cannon = new Cannon();
+            this.can = cannon.getCannon;
+            this.can.position.set(setting.xOfFirstCannon, 0, -1750);
+        }
+        else{
+            const cannon = new Cannon(0xffff00);
+            this.can = cannon.getCannon;
+            this.can.position.set(setting.xOfSecondCannon, 0, -1750);
+            this.scene.add(this.can);
+        }
+
         this.scene.add(this.can);
 
-        const bullet = new Bullet();
-        this.bul = bullet.getBullet;
-        this.bul.position.set(setting.xOfFirstCannon, 80, -1750);
+
+        // Bullet Create
+        if(userNr == 1){
+            const bullet = new Bullet();
+            this.bul = bullet.getBullet;
+            this.bul.position.set(setting.xOfFirstCannon, 80, -1750);
+        }
+        else{
+            const bullet = new Bullet(0xff00ff, setting.xOfSecondCannon);
+            this.bul = bullet.getBullet;
+            this.bul.position.set(setting.xOfSecondCannon, 80, -1750);
+            this.scene.add(this.bul);
+        }
         this.scene.add(this.bul);
+
 
 
         $('#cannonRotation').on('input', ()=>{
@@ -126,32 +154,53 @@ class Main3D{
             let canRot = parseInt($('#cannonRotation').val())*Math.PI/180 - Math.PI/2;
             let bulletPos = this.bul.setPosition(barrRot, canRot);
             console.log(barrRot, canRot);
-            net.SETbarrelPos(barrRot, bulletPos);
+            net.SETbarrelPos(parseInt($('#barrelRotation').val()), bulletPos);
         })
     }
 
-    createSecondUser(){
-        const cannon = new Cannon(0xffff00);
-        this.secCan = cannon.getCannon;
-        this.secCan.position.set(setting.xOfSecondCannon, 0, -1750);
+    createSecondUser(thisUserNr){
+        if(thisUserNr == 1) {
+            const cannon = new Cannon(0xffff00);
+            this.secCan = cannon.getCannon;
+            this.secCan.position.set(setting.xOfSecondCannon, 0, -1750);
+        }
+        else {
+            const cannon = new Cannon();
+            this.secCan = cannon.getCannon;
+            this.secCan.position.set(setting.xOfFirstCannon, 0, -1750);
+        }
+
         this.scene.add(this.secCan);
 
-        const bullet = new Bullet(0xff00ff);
-        this.secBul = bullet.getBullet;
-        this.secBul.position.set(setting.xOfSecondCannon, 80, -1750);
+        if(thisUserNr == 1) {
+            const bullet = new Bullet(0xff00ff, setting.xOfSecondCannon);
+            this.secBul = bullet.getBullet;
+            this.secBul.position.set(setting.xOfSecondCannon, 80, -1750);
+        }
+        else {
+            const bullet = new Bullet();
+            this.secBul = bullet.getBullet;
+            this.secBul.position.set(setting.xOfFirstCannon, 80, -1750);
+        }
+
         this.scene.add(this.secBul);
     }
 
     setSecCannonPos(data){
+        console.log('ustawiam pozycje cannon + '+ data.cannonRotationY)
         this.secCan.rotation.y = data.cannonRotationY;
-        this.secBul.position.set(data.bulletPos);
+        // this.secBul.position.set(data.bulletPos);
+        this.secBul.setSecBullPos = data.bulletPos;
     }
     setSecBarrelPos(data){
         this.secCan.barrelRotation = data.barrelRotation;
-        this.secBul.position.set(data.bulletPos);
+        // this.secBul.position.set(data.bulletPos);
+        this.secBul.setSecBullPos = data.bulletPos;
     }
     setSecShotBullet(data){
-        this.secBul.position.set(data.posBullet);
+        // this.secBul.position.set(data.posBullet);
+        console.log(data);
+        this.secBul.setSecBullPos = data.bulletPos;
     }
 
 }
