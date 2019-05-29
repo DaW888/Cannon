@@ -1,5 +1,6 @@
 class Net {
     constructor () {
+        this.userArrayLen = 0;
         console.log('net');
         this.client = io();
         this.connection();
@@ -13,6 +14,10 @@ class Net {
     connection(){
         this.client.on('onconnect', function(data){
             console.log(data.clientName);
+            console.log(data.userArray);
+            this.userArrayLen = data.userArray;
+            if(data.userArrayLen == 2)
+                main3d.createSecondUser();
         })
     }
     
@@ -39,6 +44,8 @@ class Net {
     GETcannonPos(){
         this.client.on('cannonPos', data =>{
             console.log(data);
+            if(this.userArrayLen == 2)
+                main3d.setSecCannonPos(data);
         })
     }
 
@@ -50,6 +57,8 @@ class Net {
     GETbarrelPos(){
         this.client.on('barrelPos', data =>{
             console.log(data);
+            if(this.userArrayLen == 2)
+                main3d.setSecBarrelPos(data);
         })
     }
 
@@ -59,6 +68,8 @@ class Net {
     GETshotBullet(){
         this.client.on('shotBullet', data =>{
             console.log(data);
+            if(this.userArrayLen == 2)
+                main3d.setSecShotBullet(data);
         })
     }
 

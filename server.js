@@ -27,11 +27,21 @@ const userArray = [];
 
 io.on('connection', function(client){
     console.log(client.id);
-    userArray.push(client.id);
+    if(userArray.length < 2)
+        userArray.push(client);
 
     client.emit("onconnect", {
-        clientName: client.id
+        clientName: client.id,
+        userArrayLen: userArray.length
     })
+
+    if(userArray.length == 2){
+        userArray[0].emit('onconnect', {
+            clientName: client.id,
+            userArrayLen: userArray.length
+        })
+    }
+
     client.on('disconnect', () => {
         console.log('rozlazony');
     })

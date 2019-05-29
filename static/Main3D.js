@@ -111,16 +111,47 @@ class Main3D{
 
         $('#cannonRotation').on('input', ()=>{
             this.can.rotation.y = $('#cannonRotation').val()*Math.PI/180;
-            let bulletPos = this.bul.setPosition();
+            let barrRot = parseInt($('#barrelRotation').val())*Math.PI/180 - Math.PI/2;
+            let canRot = parseInt($('#cannonRotation').val())*Math.PI/180 - Math.PI/2;
+            
+            let bulletPos = this.bul.setPosition(barrRot, canRot);
             net.SETcannonPos(this.can.rotation.y, bulletPos);
 
         })
 
-        $('#barrelRotation').on('input', ()=>{
-            this.can.barrelRotation = $('#barrelRotation').val();
-            let bulletPos = this.bul.setPosition();
-            net.SETbarrelPos($('#barrelRotation').val(), bulletPos);
+        $('#barrelRotation').on('input', (e)=>{
+            this.can.barrelRotation = parseInt($('#barrelRotation').val());
+            // console.log(e.target.value);
+            let barrRot = parseInt($('#barrelRotation').val())*Math.PI/180 - Math.PI/2;
+            let canRot = parseInt($('#cannonRotation').val())*Math.PI/180 - Math.PI/2;
+            let bulletPos = this.bul.setPosition(barrRot, canRot);
+            console.log(barrRot, canRot);
+            net.SETbarrelPos(barrRot, bulletPos);
         })
+    }
+
+    createSecondUser(){
+        const cannon = new Cannon(0xffff00);
+        this.secCan = cannon.getCannon;
+        this.secCan.position.set(setting.xOfSecondCannon, 0, -1750);
+        this.scene.add(this.secCan);
+
+        const bullet = new Bullet(0xff00ff);
+        this.secBul = bullet.getBullet;
+        this.secBul.position.set(setting.xOfSecondCannon, 80, -1750);
+        this.scene.add(this.secBul);
+    }
+
+    setSecCannonPos(data){
+        this.secCan.rotation.y = data.cannonRotationY;
+        this.secBul.position.set(data.bulletPos);
+    }
+    setSecBarrelPos(data){
+        this.secCan.barrelRotation = data.barrelRotation;
+        this.secBul.position.set(data.bulletPos);
+    }
+    setSecShotBullet(data){
+        this.secBul.position.set(data.posBullet);
     }
 
 }

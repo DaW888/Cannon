@@ -1,5 +1,5 @@
 class Cannon extends THREE.Object3D {
-    constructor() {
+    constructor(barrelColor = 0xff00ff) {
         console.log('cannon');
         super();
         // const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
@@ -7,7 +7,7 @@ class Cannon extends THREE.Object3D {
         // var cube = new THREE.Mesh(geometry, material);
         // console.log(this);
         // this.add(cube);
-        this.barrel();
+        this.barrel(barrelColor);
         this.wheels();
         this.add(new THREE.AxesHelper(1000));
     }
@@ -24,11 +24,11 @@ class Cannon extends THREE.Object3D {
         this.barrel.rotation.x = angle* Math.PI / 180;
     }
 
-    barrel() {
+    barrel(barrelColor) {
         console.log('barrel');
         const geometry = new THREE.CylinderGeometry(12, 12, 80, 48);
         geometry.translate(0, 30, 0);
-        const material = new THREE.MeshBasicMaterial({color: 0xff00ff});
+        const material = new THREE.MeshBasicMaterial({color: barrelColor});
         this.barrel = new THREE.Mesh(geometry, material);
         this.barrel.position.set(0, 10, 0);
         this.add(this.barrel);
