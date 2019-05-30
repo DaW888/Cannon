@@ -198,9 +198,8 @@ class Main3D{
         this.secBul.setSecBullPos = data.bulletPos;
     }
     setSecShotBullet(data){
-        // this.secBul.position.set(data.posBullet);
         console.log(data);
-        this.secBul.setSecBullPos = data.bulletPos;
+        this.secBul.position.set(data.x,data.y,data.z);
     }
 
 }
